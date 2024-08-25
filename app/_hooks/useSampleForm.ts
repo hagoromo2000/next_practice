@@ -13,18 +13,15 @@ const useSampleForm = () => {
     formState: { errors },
   } = useForm<SampleFormSchema>({
     mode: "onSubmit", // modeをonBlurにすることで、初回validation時を検索ボタンが押されたタイミングに設定できる
-
     reValidateMode: "onBlur", // reValidateModeをonBlurにすることで、検索ボタンが押された後は常に入力値が変更されたタイミングでvalidationが走る
-
     defaultValues: undefined, // デフォルト状態はフォーム要素全てが未定義(undefined)の状態として取り扱う
-
     resolver: zodResolver(sampleFormSchema), // zodResolverの引数にvalidation時に実行するschemaを渡す
   });
 
-  // const watchedInput = useWatch({ control });
   // // フォームのエラー状況
   console.log("errors", errors);
   // // フォームの入力値
+  // const watchedInput = useWatch({ control });
   // console.log("watchedInput", watchedInput);
 
   // zodの値変換+方チェックを通過した場合のみonSubmitが呼ばれる

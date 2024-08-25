@@ -1,3 +1,4 @@
+import { FormControlType } from "@/types/FormControlType";
 import {
   FormControl,
   InputLabel,
@@ -6,33 +7,34 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { FieldValues, useController } from "react-hook-form";
+import { FC } from "react";
+import { Control, FieldValues, useController } from "react-hook-form";
 
 export type Option = { value: string; label: string };
 export type SelectOptions = Readonly<Option[]>;
 
-const RHFSelect = <T extends FieldValues>({
-  name,
-  control,
-  label,
-  options,
-}: RHFProps<T> & {
+type PropsType = {
+  name: string;
+  control: FormControlType;
+  label: string;
   options: SelectOptions;
-}) => {
+};
+
+const RHFSelect: FC<PropsType> = (props) => {
   const {
     field: { value, ref, ...rest },
     formState: { errors },
-  } = useController({ name, control });
+  } = useController({ name: props.name, control: props.control });
 
-  const errorMessage = errors?.[name]?.message as string;
+  const errorMessage = errors?.[props.name]?.message as string;
 
   return (
     <Stack direction="row" alignItems="center" m={2}>
       <Typography variant="body1" mr={2}>
-        {label}:
+        {props.label}:
       </Typography>
       <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel>{label}</InputLabel>
+        <InputLabel>{props.label}</InputLabel>
         <Select
           // 値がundefinedの場合は空文字に変換する
           value={value ?? ""}
@@ -42,7 +44,7 @@ const RHFSelect = <T extends FieldValues>({
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {options.map((option: Option, index: number) => (
+          {props.options.map((option: Option, index: number) => (
             <MenuItem key={`${option.value}-${index}`} value={option.value}>
               {option.label}
             </MenuItem>

@@ -13,9 +13,19 @@ const castToValOrNull = <T extends Parameters<typeof z.preprocess>[1]>(
   }, schema);
 
 export const sampleFormSchema = z.object({
-  name: castToValOrNull(z.string()),
+  name: castToValOrNull(
+    z.string({
+      required_error: "必須項目です",
+      invalid_type_error: "入力値に誤りがあります",
+    })
+  ),
   nullableName: castToValOrNull(z.string().nullable()),
-  selectedValue: castToValOrNull(z.string()),
+  selectedValue: castToValOrNull(
+    z.string({
+      required_error: "必須項目です",
+      invalid_type_error: "選択必須です",
+    })
+  ),
   nullableSelectedValue: castToValOrNull(z.string().nullable()),
   // 最低でも一つは選択必須
   // multiOptions: z.array(z.string()).min(1),

@@ -1,18 +1,11 @@
+import { FormControlType } from "@/types/FormControlType";
 import { TextField, Typography, Stack } from "@mui/material";
 import { FC } from "react";
-import { Control, FieldValues, useController } from "react-hook-form";
+import { useController } from "react-hook-form";
 
 type PropsType = {
-  name: "name" | "nullableName" | "selectedValue" | "nullableSelectedValue";
-  control: Control<
-    {
-      name: string;
-      nullableName: string | null;
-      selectedValue: string;
-      nullableSelectedValue: string | null;
-    },
-    any
-  >;
+  name: string;
+  control: FormControlType;
   label: string;
 };
 
