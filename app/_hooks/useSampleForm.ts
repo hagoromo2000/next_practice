@@ -1,16 +1,21 @@
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   sampleFormSchema,
   SampleFormSchema,
 } from "../_schema/sampleFormSchema";
 import { SelectOptions } from "@/app/_components/RHFSelect/index";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const useSampleForm = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<SampleFormSchema>({
     mode: "onSubmit", // modeをonBlurにすることで、初回validation時を検索ボタンが押されたタイミングに設定できる
     reValidateMode: "onBlur", // reValidateModeをonBlurにすることで、検索ボタンが押された後は常に入力値が変更されたタイミングでvalidationが走る
@@ -25,9 +30,22 @@ const useSampleForm = () => {
   // console.log("watchedInput", watchedInput);
 
   // zodの値変換+方チェックを通過した場合のみonSubmitが呼ばれる
-  const onSubmit = (data: SampleFormSchema) => {
+  const onSubmit = async (data: SampleFormSchema) => {
     // zodの値変換+型チェックを通過した値
-    console.log("data", data);
+    console.log("data", data); // data: {name: '1', nullableName: null, selectedValue: '候補1', nullableSelectedValue: null}
+    const query = new URLSearchParams();
+
+    // dataオブジェクトの各プロパティに対してループ
+    Object.entries(data).forEach(([key, value]) => {
+      if (value !== null) {
+        // null以外の値のみをクエリパラメータに追加
+        query.append(key, value);
+      }
+    });
+
+    console.log(`${query.toString()}`);
+    // パスとクエリパラメータを組み合わせてナビゲーション
+    router.push(`${pathname}?${query.toString()}`);
   };
 
   return {
